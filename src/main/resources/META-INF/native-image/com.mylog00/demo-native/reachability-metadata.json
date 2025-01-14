@@ -1,0 +1,15 @@
+{
+  "reflection": [
+    {
+      "type": "com.mylog00.ReflectiveVirtualThreadBuilder",
+      "allDeclaredConstructors": true,
+      "allPublicConstructors": true,
+      "allDeclaredMethods": true,
+      "allPublicMethods": true
+    }
+  ],
+  "resources": [],
+  "bundles": [],
+  "serialization": [],
+  "jni": []
+}
