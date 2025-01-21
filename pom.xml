@@ -35,6 +35,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.16</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
@@ -109,6 +114,7 @@
                                 <!-- 3. Quick build mode -->
                                 <buildArg>-Ob</buildArg>
                                 <buildArg>--verbose</buildArg>
+                                <buildArg>--diagnostics-mode</buildArg>
                                 <!-- Experimantal-->
                                 <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
                                 <buildArg>-H:Log=registerResource:5</buildArg>-->

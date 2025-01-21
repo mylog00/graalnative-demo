@@ -1,14 +1,18 @@
 {
   "reflection": [
     {
-      "type": "com.mylog00.ReflectiveVirtualThreadBuilder",
+      "type": "com.mylog00.VThreadReflect",
       "allDeclaredConstructors": true,
       "allPublicConstructors": true,
       "allDeclaredMethods": true,
       "allPublicMethods": true
     }
   ],
-  "resources": [],
+  "resources": [
+    {
+      "glob": ".*\\.xml$"
+    }
+  ],
   "bundles": [],
   "serialization": [],
   "jni": []
