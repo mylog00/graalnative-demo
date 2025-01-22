@@ -13,10 +13,11 @@ public class VThreadReflectTest {
     public void testApp() throws InterruptedException {
         final var app = new VThreadReflect();
         final var i = new AtomicInteger(0);
-        Thread thread = app.name("VTest").unstarted(() -> {
-            System.out.println("Test: " + Thread.currentThread().toString());
+        Runnable runnable = () -> {
+            System.out.println("Test message: " + Thread.currentThread().toString());
             i.incrementAndGet();
-        });
+        };
+        Thread thread = app.unstarted("VTest", runnable);
         thread.start();
         thread.join(1000);
         Assertions.assertEquals(1, i.get());

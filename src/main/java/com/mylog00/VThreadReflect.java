@@ -13,8 +13,6 @@ public class VThreadReflect {
     private final MethodHandle NAME;
     private final MethodHandle UNSTARTED;
 
-    private Object virtualBuilder;
-
     public VThreadReflect() {
         try {
             var builderClass = Class.forName("java.lang.Thread$Builder$OfVirtual");
@@ -32,20 +30,18 @@ public class VThreadReflect {
         }
     }
 
-    public VThreadReflect name(String name) {
-        try {
-            this.virtualBuilder = OF_VIRTUAL.invoke();
-            log.info("Virtual builder invoke: {}", virtualBuilder);
-            this.virtualBuilder = NAME.invoke(virtualBuilder, name);
-            log.info("Virtual builder name: {}", virtualBuilder);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-        return this;
+    public Thread unstarted2(String name, Runnable runnable) {
+        Thread.Builder.OfVirtual builder = Thread.ofVirtual();
+        builder = builder.name(name);
+        return builder.unstarted(runnable);
     }
 
-    public Thread unstarted(Runnable runnable) {
+    public Thread unstarted(String name, Runnable runnable) {
         try {
+            Object virtualBuilder = OF_VIRTUAL.invoke();
+            log.info("Virtual builder invoke: {}", virtualBuilder);
+            virtualBuilder = NAME.invoke(virtualBuilder, name);
+            log.info("Virtual builder name: {}", virtualBuilder);
             return (Thread) UNSTARTED.invoke(virtualBuilder, runnable);
         } catch (Throwable e) {
             throw new RuntimeException(e);

@@ -4,20 +4,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class App {
-
-
-    private Object virtualBuilder;
-    private final AtomicInteger threadCount = new AtomicInteger(0);
-
     public static void main(String[] args) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(5);
+        AtomicInteger counter = new AtomicInteger(0);
         Runnable runnable = () -> {
-            System.out.println("Hello from: " + Thread.currentThread().toString());
+            System.out.println(counter.incrementAndGet() + " Hello from: " + Thread.currentThread().toString());
             latch.countDown();
+
         };
         var app = new VThreadReflect();
         for (int i = 0; i < 5; i++) {
-            app.unstarted(runnable).start();
+            app.unstarted("VThread", runnable).start();
         }
         latch.await();
     }
