@@ -9,35 +9,27 @@ import java.lang.invoke.MethodType;
 
 public class VThreadReflect {
     private static final Logger log = LoggerFactory.getLogger(VThreadReflect.class);
-    private final MethodHandle OF_VIRTUAL;
-    private final MethodHandle NAME;
-    private final MethodHandle UNSTARTED;
 
-    public VThreadReflect() {
-        try {
-            var builderClass = Class.forName("java.lang.Thread$Builder$OfVirtual");
-            log.info("Builder class: {}", builderClass);
-            var handles = MethodHandles.publicLookup();
-            log.info("Handles: {}", handles);
-            OF_VIRTUAL = handles.findStatic(Thread.class, "ofVirtual", MethodType.methodType(builderClass));
-            log.info("OF_VIRTUAL: {}", OF_VIRTUAL);
-            NAME = handles.findVirtual(builderClass, "name", MethodType.methodType(builderClass, String.class));
-            log.info("NAME: {}", NAME);
-            UNSTARTED = handles.findVirtual(builderClass, "unstarted", MethodType.methodType(Thread.class, Runnable.class));
-            log.info("UNSTARTED: {}", UNSTARTED);
-        } catch (Throwable e) {
-            throw new ExceptionInInitializerError(e);
-        }
-    }
 
-    public Thread unstarted2(String name, Runnable runnable) {
+    public static Thread newThread2(String name, Runnable runnable) {
         Thread.Builder.OfVirtual builder = Thread.ofVirtual();
         builder = builder.name(name);
         return builder.unstarted(runnable);
     }
 
-    public Thread unstarted(String name, Runnable runnable) {
+    public static Thread newThread1(String name, Runnable runnable) {
         try {
+            var builderClass = Class.forName("java.lang.Thread$Builder$OfVirtual");
+            log.info("Builder class: {}", builderClass);
+            var handles = MethodHandles.publicLookup();
+            log.info("Handles: {}", handles);
+            final MethodHandle OF_VIRTUAL = handles.findStatic(Thread.class, "ofVirtual", MethodType.methodType(builderClass));
+            log.info("OF_VIRTUAL: {}", OF_VIRTUAL);
+            final MethodHandle NAME = handles.findVirtual(builderClass, "name", MethodType.methodType(builderClass, String.class));
+            log.info("NAME: {}", NAME);
+            final MethodHandle UNSTARTED = handles.findVirtual(builderClass, "unstarted", MethodType.methodType(Thread.class, Runnable.class));
+            log.info("UNSTARTED: {}", UNSTARTED);
+
             Object virtualBuilder = OF_VIRTUAL.invoke();
             log.info("Virtual builder invoke: {}", virtualBuilder);
             virtualBuilder = NAME.invoke(virtualBuilder, name);

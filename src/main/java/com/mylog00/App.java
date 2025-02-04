@@ -12,9 +12,8 @@ public class App {
             latch.countDown();
 
         };
-        var app = new VThreadReflect();
         for (int i = 0; i < 5; i++) {
-            app.unstarted("VThread", runnable).start();
+            VThreadReflect.newThread1("VThread", runnable).start();
         }
         latch.await();
     }
